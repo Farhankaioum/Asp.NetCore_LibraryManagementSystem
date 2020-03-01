@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LibraryData;
+using LibraryServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,6 +30,10 @@ namespace LibrarySystem.Web
 
             services.AddDbContext<LibraryContext>(options => 
             options.UseSqlServer(Configuration.GetConnectionString("LibraryDBConnection")));
+
+            // register domain model
+            services.AddSingleton(Configuration);
+            services.AddScoped<ILibraryAsset, LibraryAssetService>();
 
             services.AddControllersWithViews();
 
