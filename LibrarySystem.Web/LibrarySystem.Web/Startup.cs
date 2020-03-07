@@ -34,6 +34,10 @@ namespace LibrarySystem.Web
             // register domain model
             services.AddSingleton(Configuration);
             services.AddScoped<ILibraryAsset, LibraryAssetService>();
+            services.AddScoped<ICheckout, CheckoutService>();
+
+            // register or enables temementry collection.
+            services.AddApplicationInsightsTelemetry();
 
             services.AddControllersWithViews();
 

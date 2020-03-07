@@ -18,6 +18,7 @@ namespace LibraryData
         string GetIsbn(int id);
 
         LibraryBranch GetCurrentLocation(int id);
+       // LibraryCard GetLibraryCardByAssetId(int id);
 
     }
 }
