@@ -33,8 +33,13 @@ namespace LibraryServices
         // Get LibraryAsset Via Id from DB
         public LibraryAsset GetById(int id)
         {
-            return GetAll()
-                    .FirstOrDefault( asset => asset.Id == id);
+            //return GetAll()
+            //        .FirstOrDefault( asset => asset.Id == id);
+            return _context.LibraryAssets
+                .Include(a => a.Status)
+                .Include(a => a.Location)
+                .FirstOrDefault(a => a.Id == id);
+                
 
         }
 

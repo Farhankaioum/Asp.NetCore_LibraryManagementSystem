@@ -35,6 +35,12 @@ namespace LibraryServices
             return GetAll().FirstOrDefault(c => c.Id == checkoutId);
         }
 
+        // extra
+        public Checkout Get(int id)
+        {
+            return _context.Checkouts.FirstOrDefault(p => p.Id == id);
+        }
+
         public IEnumerable<CheckoutHistory> GetCheckoutHistory(int id)
         {
             return _context.CheckoutHistories
@@ -232,20 +238,24 @@ namespace LibraryServices
             _context.Add(hold);
             _context.SaveChanges();
         }
-        public string GetCurrentHoldPatronName(int holdId)
+
+        public string GetCurrentHoldPatronName(int id)
         {
             var hold = _context.Holds
                 .Include(h => h.LibraryAsset)
                 .Include(h => h.LibraryCard)
-                .FirstOrDefault(h => h.Id == holdId);
+                .Where(h => h.Id == id);
 
-            var cardId = hold?.LibraryCard.Id;
+            var cardId = hold
+                .Include(a => a.LibraryCard)
+                .Select(a => a.LibraryCard.Id)
+                .FirstOrDefault();
 
             var patron = _context.Patrons
                 .Include(p => p.LibraryCard)
-                .FirstOrDefault(p => p.LibraryCard.Id == cardId);
+                .First(p => p.LibraryCard.Id == cardId);
 
-            return patron?.FirstName + " " + patron.LastName;
+            return patron.FirstName + " " + patron.LastName;
         }
 
         public DateTime GetCurrentHoldPlaced(int holdId)
